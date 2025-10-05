@@ -3,11 +3,12 @@ import toast from 'react-hot-toast';
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api/v1',
-  timeout: 15000, // Increased timeout for better reliability
+  baseURL: process.env.REACT_APP_API_URL || 'https://financetraker-backend-bafucshrcngbhdb6.centralindia-01.azurewebsites.net/api/v1',
+  timeout: 30000, // Increased timeout for Azure App Service cold starts
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // Important for Azure CORS with credentials
 });
 
 // Request interceptor to add auth token
