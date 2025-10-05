@@ -20,7 +20,6 @@ jobs:
           submodules: true
           lfs: false
 
-      # 🧱 Add custom build step before deployment
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -30,7 +29,9 @@ jobs:
         run: npm install
 
       - name: Build project (ignore warnings as errors)
-        run: CI=false npm run build
+        run: |
+          export CI=false
+          npm run build
 
       - name: Deploy to Azure Static Web Apps
         id: builddeploy
@@ -39,9 +40,9 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_PROUD_WATER_01E0F3800 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/"
-          api_location: ""
-          output_location: "build"
+          app_location: "build"        # ✅ Deploy the built folder directly
+          api_location: ""             # ✅ No backend here
+          skip_app_build: true         # ✅ Prevent Oryx from rebuilding
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
